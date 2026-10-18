@@ -1,0 +1,17 @@
+# ===== 密钥：绝对不能提交到 Git =====
+.env
+
+# ===== Python 虚拟环境（每个人在自己电脑上重新创建）=====
+.venv/
+
+# ===== Python 运行时自动生成的缓存 =====
+__pycache__/
+*.pyc
+
+# ===== PyCharm 的个人配置 =====
+.idea/
+
+# ===== agent 运行时生成的输出文件 =====
+todo_report.md
+code/*/output/
+code/*/logs/

@@ -1,0 +1,5 @@
+# Project dependencies. Install with: python -m pip install -r requirements.txt
+openai
+python-dotenv
+anthropic
+jsonschema
