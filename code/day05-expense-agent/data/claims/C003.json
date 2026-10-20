@@ -1,0 +1,107 @@
+{
+  "claim_id": "C003",
+  "employee": {
+    "employee_id": "E1188",
+    "name": "王浩",
+    "department": "西南大区",
+    "level": "P5"
+  },
+  "submit_date": "2026-10-12",
+  "trip": {
+    "destination_city": "成都",
+    "depart_date": "2026-07-01",
+    "return_date": "2026-07-03",
+    "purpose": "成都渠道商培训"
+  },
+  "items": [
+    {
+      "item_id": "C003-01",
+      "category": "flight",
+      "date": "2026-07-01",
+      "amount": 980.0,
+      "description": "北京大兴→成都天府 CA4196 经济舱",
+      "has_invoice": true,
+      "invoice": {
+        "invoice_code": "017430309955",
+        "invoice_no": "26806383",
+        "seller_name": "中国东方航空股份有限公司",
+        "seller_tax_id": "91261270869606495",
+        "ocr_raw_text": "增值税电子普通发票 发票代码:017430309955 发票号码:26806383 开票日期:2026-07-01 校验码:00000193785858993822 购买方 名称:星河科技有限公司 纳税人识别号:91110108MA01XH2K3Q 地址电话:北京市海淀区中关村大街1号 010-62880000 开户行及账号:招商银行北京中关村支行 110908765410201 货物或应税劳务名称:*flight*北京大兴→成都天府 CA 规格型号: 单位:项 数量:1 金额:924.53 税率:6% 税额:55.47 价税合计(大写): (小写)¥980.00 销售方 名称:中国东方航空股份有限公司 备注: 收款人:系统 复核:系统 开票人:系统"
+      },
+      "payment": {
+        "method": "corporate_card",
+        "card_last4": "4821",
+        "txn_uuid": "3635a679-b03f-ec1b-76ccc096831c",
+        "settled_at": "2026-07-01T11:07:00+08:00"
+      }
+    },
+    {
+      "item_id": "C003-02",
+      "category": "hotel",
+      "date": "2026-07-03",
+      "amount": 700.0,
+      "description": "成都春熙路亚朵酒店 2 晚",
+      "has_invoice": true,
+      "hotel_city": "成都",
+      "check_in": "2026-07-01",
+      "check_out": "2026-07-03",
+      "invoice": {
+        "invoice_code": "097790676741",
+        "invoice_no": "14890791",
+        "seller_name": "成都锦江之星酒店管理有限公司",
+        "seller_tax_id": "9182642558388544",
+        "ocr_raw_text": "增值税电子普通发票 发票代码:097790676741 发票号码:14890791 开票日期:2026-07-03 校验码:00000182308355130977 购买方 名称:星河科技有限公司 纳税人识别号:91110108MA01XH2K3Q 地址电话:北京市海淀区中关村大街1号 010-62880000 开户行及账号:招商银行北京中关村支行 110908765410201 货物或应税劳务名称:*hotel*成都春熙路亚朵酒店 2  规格型号: 单位:项 数量:1 金额:660.38 税率:6% 税额:39.62 价税合计(大写): (小写)¥700.00 销售方 名称:成都锦江之星酒店管理有限公司 备注: 收款人:系统 复核:系统 开票人:系统"
+      },
+      "payment": {
+        "method": "corporate_card",
+        "card_last4": "4821",
+        "txn_uuid": "d16e7ce1-a5ce-0f2b-64bd6a1e30bd",
+        "settled_at": "2026-07-03T12:14:00+08:00"
+      }
+    },
+    {
+      "item_id": "C003-03",
+      "category": "meal",
+      "date": "2026-07-02",
+      "amount": 160.0,
+      "description": "出差午餐+晚餐",
+      "has_invoice": true,
+      "invoice": {
+        "invoice_code": "020272322411",
+        "invoice_no": "93599415",
+        "seller_name": "成都老街坊餐饮有限公司",
+        "seller_tax_id": "91181382398589294",
+        "ocr_raw_text": "增值税电子普通发票 发票代码:020272322411 发票号码:93599415 开票日期:2026-07-02 校验码:00000057938219163641 购买方 名称:星河科技有限公司 纳税人识别号:91110108MA01XH2K3Q 地址电话:北京市海淀区中关村大街1号 010-62880000 开户行及账号:招商银行北京中关村支行 110908765410201 货物或应税劳务名称:*meal*出差午餐+晚餐 规格型号: 单位:项 数量:1 金额:150.94 税率:6% 税额:9.06 价税合计(大写): (小写)¥160.00 销售方 名称:成都老街坊餐饮有限公司 备注: 收款人:系统 复核:系统 开票人:系统"
+      },
+      "payment": {
+        "method": "corporate_card",
+        "card_last4": "4821",
+        "txn_uuid": "a978cfc0-34b1-1b68-2198a153cb2f",
+        "settled_at": "2026-07-02T13:21:00+08:00"
+      }
+    }
+  ],
+  "approval_chain": [
+    {
+      "step": 1,
+      "role": "直属主管",
+      "approver_id": "E6744",
+      "status": "approved",
+      "comment": "同意"
+    },
+    {
+      "step": 2,
+      "role": "财务",
+      "approver_id": null,
+      "status": "pending",
+      "comment": null
+    }
+  ],
+  "_system": {
+    "record_uuid": "055be3e8-98c6-44f0-a8e1-7210a9f387d1",
+    "created_at": "2026-10-12T09:12:44+08:00",
+    "workflow_version": "fin-reimb-3.2.7",
+    "source": "mobile_app",
+    "tenant": "xinghe-prod"
+  }
+}

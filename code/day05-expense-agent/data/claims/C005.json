@@ -1,0 +1,78 @@
+{
+  "claim_id": "C005",
+  "employee": {
+    "employee_id": "E1031",
+    "name": "孙立",
+    "department": "大客户部",
+    "level": "P7"
+  },
+  "submit_date": "2026-10-17",
+  "trip": null,
+  "items": [
+    {
+      "item_id": "C005-01",
+      "category": "entertainment",
+      "date": "2026-10-14",
+      "amount": 2400.0,
+      "description": "宴请华鼎资本王总等客户洽谈年度采购，共 6 人（含我方 2 人）",
+      "has_invoice": true,
+      "invoice": {
+        "invoice_code": "021375260778",
+        "invoice_no": "12858543",
+        "seller_name": "北京御膳府餐饮管理有限公司",
+        "seller_tax_id": "91241949101522722",
+        "ocr_raw_text": "增值税电子普通发票 发票代码:021375260778 发票号码:12858543 开票日期:2026-10-14 校验码:00000275484176135736 购买方 名称:星河科技有限公司 纳税人识别号:91110108MA01XH2K3Q 地址电话:北京市海淀区中关村大街1号 010-62880000 开户行及账号:招商银行北京中关村支行 110908765410201 货物或应税劳务名称:*entertainment*宴请华鼎资本王总等客户洽 规格型号: 单位:项 数量:1 金额:2264.15 税率:6% 税额:135.85 价税合计(大写): (小写)¥2400.00 销售方 名称:北京御膳府餐饮管理有限公司 备注: 收款人:系统 复核:系统 开票人:系统"
+      },
+      "payment": {
+        "method": "corporate_card",
+        "card_last4": "4821",
+        "txn_uuid": "cf7eb8f2-fa8d-71b5-d0f0a410c1cc",
+        "settled_at": "2026-10-14T11:07:00+08:00"
+      }
+    },
+    {
+      "item_id": "C005-02",
+      "category": "taxi",
+      "date": "2026-10-14",
+      "amount": 68.0,
+      "description": "公司→餐厅 网约车",
+      "has_invoice": true,
+      "invoice": {
+        "invoice_code": "021702243639",
+        "invoice_no": "38982168",
+        "seller_name": "滴滴出行科技有限公司",
+        "seller_tax_id": "9127035928789467",
+        "ocr_raw_text": "增值税电子普通发票 发票代码:021702243639 发票号码:38982168 开票日期:2026-10-14 校验码:00000188372131601189 购买方 名称:星河科技有限公司 纳税人识别号:91110108MA01XH2K3Q 地址电话:北京市海淀区中关村大街1号 010-62880000 开户行及账号:招商银行北京中关村支行 110908765410201 货物或应税劳务名称:*taxi*公司→餐厅 网约车 规格型号: 单位:项 数量:1 金额:64.15 税率:6% 税额:3.85 价税合计(大写): (小写)¥68.00 销售方 名称:滴滴出行科技有限公司 备注: 收款人:系统 复核:系统 开票人:系统"
+      },
+      "payment": {
+        "method": "corporate_card",
+        "card_last4": "4821",
+        "txn_uuid": "be62690e-ab52-28d6-9d826a024cc3",
+        "settled_at": "2026-10-14T12:14:00+08:00"
+      }
+    }
+  ],
+  "approval_chain": [
+    {
+      "step": 1,
+      "role": "直属主管",
+      "approver_id": "E1789",
+      "status": "approved",
+      "comment": "同意"
+    },
+    {
+      "step": 2,
+      "role": "财务",
+      "approver_id": null,
+      "status": "pending",
+      "comment": null
+    }
+  ],
+  "_system": {
+    "record_uuid": "402dc95a-7301-4b42-adb7-e5cdb7904a74",
+    "created_at": "2026-10-17T09:12:44+08:00",
+    "workflow_version": "fin-reimb-3.2.7",
+    "source": "mobile_app",
+    "tenant": "xinghe-prod"
+  }
+}

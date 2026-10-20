@@ -1,0 +1,10 @@
+[
+  {"claim_id": "C001", "requested_total": 2342.0, "expected_decision": "approve",      "expected_approved_total": 2342.0, "checks": "全部合规：杭州非一线城市 2 晚 760（每晚 380 ≤ 400），3 天餐饮 330 ≤ 450"},
+  {"claim_id": "C002", "requested_total": 5260.0, "expected_decision": "partial",      "expected_approved_total": 4720.0, "checks": "上海住宿 3 晚 2340 核减到 1800（P2.1/P2.2）；申请超过 5000 但核定 4720 不触发 P1.4"},
+  {"claim_id": "C003", "requested_total": 1840.0, "expected_decision": "reject",       "expected_approved_total": 0.0,    "checks": "7 月的费用 10 月 12 日才提交，超过 60 天（P1.2），全部不予报销"},
+  {"claim_id": "C004", "requested_total": 2658.0, "expected_decision": "partial",      "expected_approved_total": 2412.0, "checks": "出租车无发票（P1.1）、违章罚款（P5.1）不予报销"},
+  {"claim_id": "C005", "requested_total": 2468.0, "expected_decision": "needs_review", "expected_approved_total": 68.0,   "checks": "招待 2400 ÷ 6 人 = 400 > 300，待人工复核（P3.2），不计入核定总额"},
+  {"claim_id": "C006", "requested_total": 6130.0, "expected_decision": "needs_review", "expected_approved_total": 6130.0, "checks": "每笔都合规，但核定总额 6130 > 5000，触发 P1.4"},
+  {"claim_id": "C007", "requested_total": 5049.0, "expected_decision": "partial",      "expected_approved_total": 2733.0, "checks": "公务舱按经济舱 1280（P4.1）；北京住宿 650 → 600；2 天餐饮 410 → 300；236 元网约车没写原因（P4.2）"},
+  {"claim_id": "C008", "requested_total": 1552.0, "expected_decision": "partial",      "expected_approved_total": 52.0,   "checks": "部门聚餐不属于业务招待（P3.3）、KTV 属于个人娱乐（P5.1）"}
+]
