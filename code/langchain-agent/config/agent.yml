@@ -1,0 +1,72 @@
+# ==============================================
+# Agent 运行参数：控制 agent「最多跑几步、什么时候压缩历史、哪些操作要审批、谁能用哪些工具」
+#
+# 谁读取它：utils/config_handler.py 启动时读成字典 agent_conf，然后
+#   agent/agent.py      → 调用上限、摘要门槛、审批工具（组装中间件时用）
+#   agent/middleware.py → role_tools（filter_tools_by_role 每次调用模型前用）
+#   services/data_store.py → data 段（数据文件位置）
+# 什么时候生效：改完要重启程序
+# ==============================================
+
+# 每一轮用户提问里，最多调用模型多少次（ModelCallLimitMiddleware 的 run_limit）。当前 8
+# 「一轮」= 用户发一句话到 agent 给出回答。正常一轮：查工具 1~3 次 + 回答 1 次 ≈ 2~4 次模型调用
+#   调太小（如 2）：复杂问题（先列订单 → 查保修 → 建工单）走不完就被强制结束，用户只看到「Model call limits exceeded」
+#   调太大（如 30）：模型陷入「调工具 → 再调工具」的死循环时，要烧很多 token 才停下
+# 建议范围 5 ~ 12；看日志里「本对话累计 N 次调用」，如果正常问题经常接近上限，再适当调大
+model_call_run_limit: 8
+
+# 每一轮里最多调用工具多少次（ToolCallLimitMiddleware 的 run_limit）。当前 10
+# 超了以后不会直接结束，而是告诉模型「不能再调工具了」，让它用已有信息回答（exit_behavior="continue"）
+# 一般设得比 model_call_run_limit 略大（模型一次可能同时请求多个工具）。建议范围 6 ~ 15
+tool_call_run_limit: 10
+
+# 对话摘要的触发门槛（SummarizationMiddleware 的 trigger）：消息历史的总 token 超过这个数，
+# 就把较早的消息交给摘要模型压缩成一段摘要。当前 6000
+#   为什么需要：模型没有记忆，每次调用都要把全部历史重新发一遍，历史越长每次越贵、也越容易超出上下文
+#   调小（如 2000）：更早压缩、更省钱，但摘要会丢细节（比如用户很早说过的订单号）
+#   调大（如 20000）：保留更多原文、回答更准，但每次调用更贵；不能超过模型上下文窗口
+# 注意：系统提示词 + 工具 schema 本身就约 1500 token（日志里第一次调用「输入 1500」左右），门槛要留出这部分
+summary_trigger_tokens: 6000
+
+# 摘要后保留最近多少条原始消息不压缩（SummarizationMiddleware 的 keep）。当前 12
+# 一次工具调用就会产生 2 条消息（AI 请求工具 + 工具结果），所以 12 条大约是最近 2~4 轮问答
+#   调小：更省 token，但「刚才说的那个」可能找不到原文，只能靠摘要
+#   调大：最近的上下文更完整，但压缩效果变差。建议范围 6 ~ 20
+summary_keep_messages: 12
+
+# 需要人工审批的工具（HumanInTheLoopMiddleware 的 interrupt_on）：模型想调用它们时，程序先暂停，等客服确认
+# 为什么是这两个：它们会「写数据」（建工单、改工单状态），写错了有真实后果；查询类工具不需要审批
+# 想体验审批流程更多，可以临时把查询工具（如 get_order_detail）也加进来；名字必须和工具函数名一致
+approval_required_tools:
+  - create_repair_ticket
+  - update_ticket_status
+
+# 角色 → 能看到的工具（agent/middleware.py 的 filter_tools_by_role 用）。不在列表里的工具，模型根本不知道它存在
+# 角色来自 data/users.json 的 role 字段：customer = 普通用户，supervisor = 客服主管
+# 注意：这只是「让模型看不见」（第一道防线），真正的权限检查在 services 里还要再做一遍（第二道防线）
+# 新增工具时：在 agent/tools/__init__.py 的 ALL_TOOLS 里加上，再在这里给对应角色登记，否则模型看不到
+role_tools:
+  customer:
+    - search_knowledge
+    - list_my_orders
+    - get_order_detail
+    - check_warranty
+    - create_repair_ticket
+    - get_ticket_status
+  supervisor:
+    - search_knowledge
+    - list_my_orders
+    - get_order_detail
+    - check_warranty
+    - create_repair_ticket
+    - get_ticket_status
+    - update_ticket_status
+
+# 业务数据文件位置（相对项目根目录），services/data_store.py 按这里的键名读写
+# 它们模拟真实项目里的数据库表；以后换成真数据库，只改 data_store.py，这里也就不需要了
+data:
+  users: data/users.json
+  orders: data/orders.json
+  warranty_rules: data/warranty_rules.json
+  # 运行时生成的工单，放在 runtime 目录，不提交 git（测试时 tests/conftest.py 会把它换成临时文件）
+  tickets: data/runtime/tickets.json

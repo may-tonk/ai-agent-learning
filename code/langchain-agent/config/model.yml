@@ -1,0 +1,87 @@
+# ==============================================
+# 模型配置：所有和「模型」有关的可调参数都放这里，改参数不用动代码
+#
+# 谁读取它：utils/config_handler.py 在程序启动时读成字典 model_conf，
+#           model/factory.py 的 build_chat_model(section) 按段取用：
+#             chat     → get_chat_model()：agent 每次「思考」用的主模型
+#             fallback → agent/agent.py 的 ModelFallbackMiddleware：主模型失败时的备胎
+#             summary  → SummarizationMiddleware（压缩长对话）和 services/summary_service.py（会话小结）
+#             embedding→ get_embeddings()：知识库检索时把问题变成向量
+# 什么时候生效：改完要重启程序（配置只在启动时读一次）
+#
+# chat / fallback / summary 段里，除了 provider 和 model，其余键会原样作为参数传给模型类，
+# 例如 chat 段最终相当于 ChatDeepSeek(model="deepseek-chat", temperature=0.3, max_tokens=1024, timeout=60, max_retries=2)
+# 所以想加别的模型参数（如 top_p），直接在这里加一行即可，前提是该模型类支持这个参数
+# ==============================================
+
+# ---------- 聊天模型（agent 的大脑） ----------
+chat:
+  # init_chat_model 的 model_provider：决定用哪个集成包（deepseek → langchain-deepseek 的 ChatDeepSeek）
+  # 可选：deepseek / openai / anthropic / ollama …（需装好对应的 langchain-xxx 包，并在 .env 配好 key）
+  provider: deepseek
+  # 具体模型名。deepseek-chat 支持工具调用（agent 必需）；deepseek-reasoner 是推理模型，不支持 temperature
+  # 注意：实测接口返回的 model_name 是 deepseek-flash，这是 DeepSeek 服务端的别名，不影响使用
+  model: deepseek-chat
+  # 采样随机性。当前 0.3；范围 0 ~ 2
+  #   调低（0 ~ 0.3）：每次回答几乎一样，适合客服、分类、抽取这类要「稳定、可复现」的任务
+  #   调高（0.8 ~ 1.5）：措辞更多样，适合起名、写文案；客服场景调高容易答得飘、格式不统一
+  # 它不是「准确率旋钮」：调低不代表不会答错，答错要靠工具 + 提示词解决。lessons/01 第 3 节有对比实验
+  temperature: 0.3
+  # 单次回复最多生成多少 token（1 个中文字约 1 token 左右）。当前 1024；常用 512 ~ 4096
+  #   太小 → 回答被截断，response_metadata 里 finish_reason = length（lessons/01 第 4 节演示）
+  #   太大 → 不会让回答变长，只是允许它更长；但模型「跑偏」时会多花钱
+  # 只限制「输出」长度；能塞多少历史消息由模型的上下文窗口决定，是另一回事
+  max_tokens: 1024
+  # 单次请求最多等多少秒。当前 60；常用 30 ~ 120
+  #   注意是「一次模型调用」，不是整轮对话（一轮可能调用模型好几次）
+  #   调太小 → 长回答还没生成完就报 ModelTimeoutError；调太大 → 网络卡住时用户要干等
+  timeout: 60
+  # 遇到可重试的错误（网络错误、429 限流、5xx）时，客户端自动重试几次。当前 2；常用 1 ~ 3
+  #   401（key 错）、404（模型名错）这类错误重试多少次都没用，会直接报错
+  #   调大 → 更抗抖动，但失败时用户等待更久；主模型重试仍失败才会轮到下面的 fallback
+  max_retries: 2
+
+# ---------- 备用模型：主模型重试后仍失败时切换（agent/agent.py 的 ModelFallbackMiddleware 用） ----------
+# 只写 provider 和 model，其余参数用该模型类的默认值；需要的话也可以像 chat 段一样加 temperature 等
+# 真实项目里备用模型最好换一个「不同厂商」的，这样一家服务整体宕机时还能用
+fallback:
+  provider: deepseek
+  model: deepseek-reasoner
+
+# ---------- 摘要模型：对话太长时把旧消息压缩成摘要（SummarizationMiddleware），以及 /summary 会话小结 ----------
+# 摘要任务简单，用同一个便宜模型即可；真实项目常用更便宜的小模型做这件事
+summary:
+  provider: deepseek
+  model: deepseek-chat
+  # 摘要要忠实、稳定，不需要创造性，所以用 0
+  temperature: 0
+
+# ---------- 向量模型：把文本变成向量，用于知识库检索（services/kb_service.py → model/factory.get_embeddings） ----------
+# ！！！这一段必须和实验6 建 Chroma 集合时用的完全一致（模型、维度），否则问题向量和库里向量不在同一个空间，
+#      检索结果是乱的，甚至因为维度不同直接报错。想换模型/维度，必须用新配置重新建库
+embedding:
+  # 走哪个百炼接口：text = 文本向量接口（DashScopeEmbeddings）；multimodal = 多模态向量接口（qwen3-vl-embedding 必须走这个）
+  api: multimodal
+  # 百炼向量模型名，需要 .env 里的 DASHSCOPE_API_KEY
+  model: qwen3-vl-embedding
+  # 向量维度。当前 1024（与实验6 建库一致，不要改）；该模型可选 256 ~ 2048，默认 2560
+  #   维度越高信息越多、检索可能更准，但存储和计算更贵；建库后改它 = 必须重建库
+  dimension: 1024
+  # 一次请求最多送几段文本去向量化。当前 10；接口上限 20
+  #   只影响建库这类批量向量化的速度，检索时一次只有 1 个问题，基本不受影响
+  batch_size: 10
+
+# ---------- 重排模型：检索的第 2 步，给「召回」的候选资料逐条打相关性分数（services/rerank_service.py → model/factory.get_reranker） ----------
+# 和上面的向量模型有什么区别（面试常问）：
+#   向量模型（双塔 / bi-encoder）：问题和资料「分开」各自变成一个向量，再比距离。资料的向量可以提前算好存进库里，
+#                                  所以几百万条也能毫秒级找出来，但把一段话压成一个向量会丢细节 → 适合「粗筛」
+#   重排模型（交叉编码 / cross-encoder）：把「问题 + 一条资料」拼在一起整体读一遍，直接输出相关性分数，
+#                                  能看出词和词之间的对应关系，更准；但每条资料都要现算，慢，只适合对少量候选「精排」
+#   所以标准做法是两段式：向量检索先召回 10 条（快）→ 重排模型精排，只留最好的 3 条（准）
+rerank:
+  # 重排模型厂商：dashscope = 阿里云百炼，用 langchain_community 的 DashScopeRerank，需要 .env 里的 DASHSCOPE_API_KEY（和向量模型共用）
+  provider: dashscope
+  # 百炼的文本重排模型。gte-rerank-v2 支持中英文，分数范围 0 ~ 1，越大越相关
+  # 实测（2026-10-28）：一次对 10 条候选（每条约 150 字）打分 0.12 ~ 0.20 秒
+  # 注意：langchain_community 的 DashScopeRerank 会把这里的模型名强制改成旧版 gte-rerank，model/factory.py 里已经改回来了
+  model: gte-rerank-v2

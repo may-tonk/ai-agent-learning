@@ -1,0 +1,18 @@
+<!doctype html>
+<!-- 【v2 网页版新增】页面的「空壳」：浏览器先加载它，再由 src/main.jsx 把 React 组件渲染进 <div id="root"> -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智扫通售后客服</title>
+    <!-- 浏览器标签页上的小图标。直接把 SVG 写在 data: 地址里，不用另放图片文件；
+         不写的话浏览器会自己去请求 /favicon.ico，控制台出现一条 404 -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230e9384'/%3E%3Ccircle cx='12' cy='12' r='6.5' fill='none' stroke='white' stroke-width='1.8'/%3E%3Ccircle cx='12' cy='12' r='2.2' fill='white'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <!-- React 会把整个页面画在这个 div 里 -->
+    <div id="root"></div>
+    <!-- type="module"：用浏览器原生的 import 语法加载 JS；开发时 Vite 会把 .jsx 即时翻译成 JS -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

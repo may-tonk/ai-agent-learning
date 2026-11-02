@@ -1,0 +1,34 @@
+# ==============================================
+# LangChain 学习项目：扫地机器人售后客服 agent
+# 版本和实验6 完全一致，已经装过实验6 依赖的 .venv 不需要重新安装
+# 安装：python -m pip install -r requirements.txt   （在 .venv 里执行）
+# ==============================================
+
+# LangChain 核心
+langchain==1.4.6
+langchain-core==1.6.12
+langchain-community==0.4.2
+langgraph==1.2.16
+
+# 聊天模型：DeepSeek
+langchain-deepseek==1.1.1
+
+# 知识库：连实验6 在 Ubuntu 上的 Chroma；向量模型用百炼
+langchain-chroma==1.1.0
+chromadb==1.5.9
+dashscope==1.27.8
+
+# 配置 / 环境变量
+pyyaml==6.0.3
+python-dotenv==1.2.4
+
+# 测试
+pytest
+
+# 【v2 网页版】新增：网页后端（webapp/backend）
+# FastAPI 和 uvicorn 在 .venv 里本来就有，这里只是把版本记下来
+fastapi==0.145.0
+uvicorn==0.54.0
+# 短期记忆存 SQLite 文件：AsyncSqliteSaver 在 langgraph-checkpoint-sqlite 里，它依赖 aiosqlite（异步读写 SQLite）
+langgraph-checkpoint-sqlite==3.1.2
+aiosqlite==0.22.1

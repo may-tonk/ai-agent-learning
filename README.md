@@ -79,3 +79,13 @@ python code/day05-expense-agent/compare_protocols.py
 - [x] Day 5：报销审核 agent（工具设计原则、评测、结构化输出、两家协议对比）
 - [ ] 第 2 周：阅读主流 agent 框架源码，建立评估基线
 - [ ] 第 3 周：记忆、MCP、链上工具与安全、毕业项目
+
+## 最新学习项目
+
+- `code/day04-agent-upgrade`：Pydantic、结构化输出、流式响应、异步并发、FastAPI 与故障演练，详见该目录 README。
+- `code/langchain-agent`：智扫通售后客服，包含 LangChain / LangGraph、短期记忆、人工审批、检索重排，以及 FastAPI + React 网页版。
+- 当前主线请阅读 [LangChain 项目说明](code/langchain-agent/README.md) 和 [网页版说明](code/langchain-agent/webapp/README.md)。
+
+`lab06-rag-customer-service` 按要求不包含在本仓库中。主线项目的知识库检索依赖已有 Chroma 服务、匹配的向量模型及资料集合；下载本仓库不会自动创建这些外部资源。
+
+真实 API 密钥、虚拟环境、前端依赖、编辑器配置、运行日志及运行时数据库不上传。请按照各子项目 README 配置本地环境。

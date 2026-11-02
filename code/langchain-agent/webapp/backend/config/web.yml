@@ -1,0 +1,25 @@
+# ==============================================
+# 【v2 网页版新增】网页后端的配置
+#
+# 谁读取它：webapp/backend/app.py 启动时用 utils/config_handler.load_yaml 读成字典 web_conf
+# 什么时候生效：改完要重启后端（用 --reload 启动时，改 .py 会自动重启，改 yml 不会，要手动重启）
+# ==============================================
+
+# 允许跨域访问后端的网页地址（CORS）
+# 什么是跨域：浏览器规定，页面在 A 地址（:5173）上，用 JS 去请求 B 地址（:8001）时，
+#   B 必须在响应头里声明「我允许 A 访问」，否则浏览器拦下响应，页面拿不到数据。
+# 开发时页面通过 Vite 转发访问后端（浏览器看到的都是 :5173），其实用不到这里；
+#   留着是为了以后前端直接请求 :8001（例如部署到不同域名）时也能用。
+# 注意：生产环境只写真实的前端域名，不要写 "*"（"*" = 任何网站都能调你的接口）
+cors_origins:
+  - http://localhost:5173
+  - http://127.0.0.1:5173
+
+# 短期记忆存在哪（checkpointer）。webapp/backend/checkpointer.py 按 kind 创建对应的 Saver
+#   memory：InMemorySaver，存在进程内存里，重启后端就没了（测试用）
+#   sqlite：AsyncSqliteSaver，存在下面的 SQLite 文件里，重启后同一个 thread_id 还能接着聊
+#   以后可以加 postgres（Ubuntu docker 里的 PostgreSQL），代码只改 checkpointer.py 一处
+checkpointer:
+  kind: sqlite
+  # 相对项目根目录；runtime/ 是运行时生成的文件，不提交 Git（见 .gitignore）
+  sqlite_path: webapp/backend/runtime/app.db

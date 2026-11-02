@@ -1,0 +1,8 @@
+# 提示词文件登记表：代码里只写「名字」，路径和内容都在这里改
+# 谁读取它：utils/prompt_loader.py 的 load_prompt(name)
+#   system          → agent/middleware.py 的 build_system_prompt：每次调用模型前填入用户名、日期、当前订单
+#                     （文件里的 {user_name} {role} {today} {current_order_id} 是占位符，不能删也不能改名）
+#   session_summary → services/summary_service.py：/summary 生成结构化会话小结时用
+# 想对比不同提示词的效果：复制一份 txt 改内容，再把这里的路径指过去，重启程序即可
+system: prompts/system_prompt.txt
+session_summary: prompts/session_summary.txt

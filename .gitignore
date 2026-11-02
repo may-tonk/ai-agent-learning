@@ -15,3 +15,27 @@ __pycache__/
 todo_report.md
 code/*/output/
 code/*/logs/
+
+# Excluded learning reference project
+/code/lab06-rag-customer-service/
+
+# Local credentials and editor configuration
+.env.*
+!.env.example
+.cursor/
+.vscode/
+
+# Generated dependencies, caches, build output and runtime data
+node_modules/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+runtime/
+run_logs/
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3

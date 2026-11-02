@@ -1,0 +1,22 @@
+{
+  "name": "zhisaotong-web",
+  "private": true,
+  "version": "2.0.0",
+  "description": "【v2 网页版新增】智扫通售后客服的 React 前端（JSON 不能写注释，说明见 webapp/README.md）",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.5"
+  }
+}

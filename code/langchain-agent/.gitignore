@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+logs/
+data/runtime/
+.idea/
+
+# 【v2 网页版】后端运行时生成的 SQLite（app.db）、前端依赖和打包产物，都不提交
+webapp/backend/runtime/
+node_modules/
+dist/
